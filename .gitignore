@@ -52,3 +52,10 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+*.png
+*.jpg
+*.xml
+test.txt
+*.webp
+new 1
+*.txt

@@ -1,0 +1,16 @@
+opencv_createsamples opencv_traincascade //Vec// //Annotations// //TemplateSets//
+
+//Config//
+	SavedTemplates 
+
+//Annotations//
+	//<Presetname>//
+		//test//
+
+//Vec//
+	//<Presetname>//
+
+//TemplateSets//
+	//<Presetname>//
+		//data//
+
