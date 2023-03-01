@@ -1,0 +1,91 @@
+cmake_minimum_required(VERSION 3.17)
+
+project(QtConsoleApplication9)
+#TARGET(QtConsoleApplication9)
+
+
+#set(CMAKE_PREFIX_PATH "C:\\Qt\\5.14.2\\msvc2017_64\\")
+set(CMAKE_PREFIX_PATH "E:\\Project\\Qtv5.14.2\\msvc2017_64\\")
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+
+
+find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt5 COMPONENTS Gui REQUIRED)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Test REQUIRED)
+
+set(DIRS ${QT_LIBS_DIR} ${QT_LIBEXECS_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+#set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++0x")
+
+add_definitions(-DGLEW_STATIC)
+#QMakeQuery=$HOME/build/qt5/qtbase/bin qmake -query
+ # include(QMakeQuery)
+ # query_qmake(QT_INSTALL_PLUGINS QT_PLUGINS_DIR)
+ # query_qmake(QT_INSTALL_IMPORTS QT_IMPORTS_DIR)
+ # query_qmake(QT_INSTALL_LIBS QT_LIBS_DIR)
+ # query_qmake(QT_INSTALL_LIBEXECS QT_LIBEXECS_DIR)
+ # query_qmake(QT_HOST_DATA QT_DATA_DIR)
+ set(QT_MKSPECS_DIR ${QT_DATA_DIR}/mkspecs)
+
+ if (Qt5_POSITION_INDEPENDENT_CODE)
+     SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ endif()
+
+#TARGET(QtConsoleApplication9)
+#set(SOURCES
+add_executable(QtConsoleApplication9
+    src/QApp.h 
+    #src/CustomItemGridModel.h 
+    #src/CustomItemListModel.h 
+    src/UnitTest.h 
+    src/CustomItemListModelv2.h 
+    src/CustomListView.h
+	src/mItemListv2.h
+	src/CustomListView.cpp 
+    src/main.cpp 
+    src/QApp.cpp 
+    src/UnitTest.cpp
+	src/ParseImg.h
+	src/ParseImg.cpp
+)
+#04.08.20: new optimisation that allows statlically linekd libs/.dlls to be added automatlically without the need to utilsied QVerifier to do so manually anymore....
+set(QTDIR${_lib_suffix} "E:\\Project\\Qtv5.14.2\\msvc2017_64\\lib\\cmake")
+if(DEFINED QTDIR${_lib_suffix})
+			list(APPEND CMAKE_PREFIX_PATH "${QTDIR${_lib_suffix}}")
+		elseif(DEFINED QTDIR)
+			list(APPEND CMAKE_PREFIX_PATH "${QTDIR}")
+		elseif(DEFINED ENV{QTDIR${_lib_suffix}})
+			list(APPEND CMAKE_PREFIX_PATH "$ENV{QTDIR${_lib_suffix}}")
+		elseif(DEFINED ENV{QTDIR})
+			list(APPEND CMAKE_PREFIX_PATH "$ENV{QTDIR}")
+		endif()
+	
+#include_directories(src)
+#INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/src )
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv-4.2.0-vc14_vc15/opencv/build/include )
+#INCLUDE_DIRECTORIES( ${OpenCV_INCLUDE_DIRS} )
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+#add_executable(QtConsoleApplication9 ${SOURCES} )
+
+
+add_subdirectory(libs/opencv-4.2.0-vc14_vc15/opencv/sources)
+
+
+
+qt5_use_modules(QtConsoleApplication9 Core Gui Widgets Test)
+
+
+
+#INTERFACE target_link_libraries(${QtConsoleApplication9} Qt5::Core Qt5::Gui Qt5::Widgets)
+#target_link_libraries(QtConsoleApplication9 ${OpenCV_INCLUDE_DIRS} )
+#target_link_libraries(QtConsoleApplication9 ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv-4.2.0-vc14_vc15/opencv/build/x64/vc15/lib/opencv_world420d.lib )
+target_link_libraries(QtConsoleApplication9 ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv-4.2.0-vc14_vc15/opencv/build/x64/vc15/lib/opencv_world420.lib )
+#target_link_libraries(QtConsoleApplication9 Qt5::Core Qt5::Gui Qt5::Widgets)
+#target_link_libraries("E:\\Project\\SOFT20091-SDI\\libs\\opencv-4.2.0-vc14_vc15\\opencv")
+

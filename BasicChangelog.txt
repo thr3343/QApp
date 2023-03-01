@@ -1,0 +1,177 @@
+
+	Added new system for the veiw mdoel with a Qlist of all 
+
+
+a0.0.3:
+	Overrided QAbstractListModel to new CustomItemListModel to allow for a readonly varient of the model to be used to rpevent editing the represented index row members representing the relative files in the dierctory
+	
+	New Bugs:
+		Test Wodget for Image Viewport is not removed/destroyed when Image list is closed
+		Image Viewport Widget can also be duplicated by clicking on the Image ListView Model
+		
+	
+	
+a0.0.4(:
+	Ported to Qtv5.14.1 to fix linking issues with Qt Platform plugins with.when using QDeploy to compile a dynamically linked Portable Binary
+	
+	- Inital Expeirmnetao Unit testinG framework removed due to compile errors with MigW when building/compiling a portable binary
+	
+
+
+a0.0.5 (04.04.20):
+	+ :First implementation of A Qpainted Object onto a QOBject (Image ViewPort);
+	+ :index memebers of the ItemViewmodel are now properly represented as the actual Imge file paths insetad of a generic represented number
+	+ :Backend Image handling now changed (partially) to QPixmap from Qimage to improve pe4rformance with the Qpainter when handling selected represented image objects
+	= : initial tenative implemtation of OpenCV: 
+	
+	Issues:
+	- :Separte test Widget for Image Viewport temprarily disbaled due to isues with targeting specific Qwidgets for Painting/drawing 
+	- :hwoever due to limiatiosn with the Qt Framework workflow  for Bulding/compiling Portabl;e Binaries with 3rd party libraries, executable bianries can't be undated until OpenCv dependencies can be linked properly 
+	
+	New Bugs:
+		- render image is adjusted by default to the Main Window geometry and as a result is not drawn with the crrect aspect ratio
+		
+a.0.5.1 (04.04.20)
+	Changed Internal image handling from Qimage to Qpixmap for signicantly improved performance when rendering and scaling bitmap images as aQpainted object....
+	
+
+a0.6.0 (06.04.20) -> 07.04.20 : Commit: 53ff02c1606d3fdc13286488a6f57a89c036cdc1
+	
+	+ Cleaned up garbage comments and code for improved readibility and reduced file size
+	+ Initiasl experimental support for sorting and updating the viewmodel based on a sorting Hierarchy and changed to the contents of the Img Directory
+		This could alos be sued to enable Drag and Drop support later
+	
+	
+	- Removed unused/depreciated debuging feature to open the root project diercory as it was not really used anymore (at elast for the time being
+	
+07.04.20
+	+ Refactored ItemView to a subclass of QTreeView to hekp declutter the Main QAPP class
+	
+a0.7.0 (11.04.20) : Commit: 315dde3fef439a3ac6c5c2613da85611f827aa25
+	+ Added initial OpenCV Integration and .........
+	
+	
+	- (issues)
+		#to setu the portable bianr build sfor some stupid reason only the MSVC2017_64 compiler works with the OpenCV2 Linkign 
+			#when linking/adding/implementing 3rd partly Libararies (as oterwise the Mingw_32w64 compielr onCreatr cannot reference the OpenCv2 headers correctly
+	
+
+a0.8.0 (14.04.20) : Commit: 8196c736a8137f6855cc86c3638a43b4e4a63813
+	+ significantly Improved accuracy and sensitivity/effectiveness of Edge detection by adding a threshold bitmap stage/step before drawing the contours
+	+ Output images are now placed in a seperate, dedicated output folder to prevent cluttering and pollution of the input/working folder
+	
+	- performance may be slightly decreased due to the added threshold step as three images insetad of 2 are generated in memory
+	
+	- Contour detection is still buggy 
+		and fails on more complex geometry/If the contrast isn't high enought/Colours are smudged/blurred/use gradients (Due to the limiations of Binary bitmaps with almost non-Existant Bit Depth)
+		This is due to limitations with the threshold Function where only a set range between Brightest (0) and darkest (255) can be crushed into a set threshold so the contour detection can be hanlded propery
+		this is nessacery as the and gradent detection functions only detect colours with a BGR value of (255,255,255) (Absolute Black) and will fail on any other colour
+		
+	
+	a0.8.1 : Commit: 1b46c5c3d911fc8de07320214740027de1e8c82d
+	
+		 + Fixed Silly bug with Image resizing
+		 
+	a0.8.2 : (20.04.20) :  e28f792dfbc322dd23108cbdc8857de5c70a1bb5
+		
+		+ Further improved Canny Edge detection accuracy by using Adaptive Thresholding instead of Simple Thresholding which detects the colour regions more accurately when converting to Binary Bitmaps
+
+		+ Changed build path for linking with Qt Plugin to fix some stupid path desync issues where the path would not be updated if the added Qt installation path was different/changed
+		
+		
+		Portable Binary:
+		
+			+ optimised size of .dll dependencies in Compiled binary by removing Unused OpenCv componants (HighGui, Java and Python tests) and adding O2 and Ob2 optimisations 
+			
+			+ Further potential size and speed optimisation by enabling CPU instruction sets and AVX2 in the OpenCV2 CMakeLists when compiling the binary build
+				It is current unknown if this will cause System crashes if used on an older CPU without AVX2 support (e.g. pre 2014 CPUs e.g. Ivy Bridde/Bulldoser or older)
+	
+a0.9.0 (25.04.20) : a87131b23d376e2ffd4e6cd046254d12e3697ce9
+	
+	+  ability to dynamically add and anottate any given contour detected  during the drawing process
+		+ This can detect wether a countour is Convex or otherwise
+	
+	+ also added a simple caculation feature to display the current progress percentage: this is relatively accurate as the nukber of contorus before the drawing process is already known and a s aresult progress approximation is quite accurate to a suprising decent level of accuracy
+	
+	+ RNg initisation fo teh colour scalar is also added to the main Drawing for loop structiure to mroe esilay disturn indivdiual cotorus for debugging purposes
+	
+	
+	
+		- Major Performance regression: Due to many of the changes made/implemented, the performance of the Edge detection and drawing is significnatly reduced prior to eailer version ([lease confirm with basic benchmark comparison)
+			- This is likely partially due to the the introduction of an if statement to detect Contur convexity, which is likley causing a gerately icnreassed level of cahce misig/Branch mispredicts/ branching issues 
+			- Another likley/major reasons for the perfoamnce issues is the introduction of the ApproxPolyDB function to approximate vert count/ poligonal approximation of the detected contuors
+		
+a0.10.0 (25.04.20) : 6dfc0a03939148c2fd3794b4d37c5fce898d60f6
+		
+		+ Can now detect the number of sides of a given contour which allows for teh ability to detect geometry/shapes via the number of current sides
+		
+		+ Tentaive implemenation of a very basic Unit Testing framework with Assert statements 
+			(at the moment this can only throw crash/Exceptions under certain criteria if they return true 
+				but is planned to be expanded into more versitile checking to prevent specific cercumstances leading into Errors/exceptions)
+			
+		- The shape detection is currectly extremely crude and does not implement any form of annotation file handling or true object detection approximation (outside of possibly Polygonal approximation)
+		
+		- Performance is still rather poor compared to eailer versions and is several times slower than the eailer canney Edge detection methods utilised in older versions.
+		
+		- This is unfortuately extremely buggy and lacks the ability to carry out Vertex calculations (detect the angle/vertex between sides), which causes issues with detecting between certain objects with the same number of sides (e.g. Squares, rectangles and Trapeziums)
+			- Futher Performance regressions due to all the addiitonal checks that have been added to the Image Parsimg Method 
+			
+		- Due to additional issues with Adapitve Thresholding not Polygonal Approximation not approximating sides currectly, Adapitve thresholding has fallen back to Basic thersholding whuich will reduce the abilitiy to handle complex geometry
+			
+	
+	
+	
+a0.11.0
+
+
+
+
+a.0.12.0 
+
+		Add Unit Tests
+			Fix sortsSets : Done
+			
+			Add FileSort hack by ordering based on retreivedFileInfo.FileSize()
+			
+			
+			
+	Unit test ideas to test:
+		//-> bad invalid file extension (ALos check against list of known image file exentions or to verofy that ti is a bitmap that OpenCv can PARSE/handle Adequately)
+		-> Sort failed/Out of range
+		//-> no loaded member/indexes in fileName vector/list (is empty list: could e used in multple places);
+		//-> check clicked index is same as actual file path (might ntonneed this anymore as we are not synchronismg multple listsStructures anymroe to represent teh crertcly aligned filenames)
+		-> check to abort attemtped detsructor call if isBusy bool is true During operations to avoid potential data Corruption(e.g. processing image, sorting Liste e.g.)
+		
+		+ Fixed very annoyign sort bug cause by accientially redeclairing the filename vetcor when its is already defined/delaired in the main QAPP.h headers
+		
+		+ chnaged dierctory list hanlding to no lnre require a second dedicated vector/List to be synchronized to the main InputImages Vector/List
+			(this was acheived by only appending the Image Files names isnetad of the ENtrie paths as Provided by teh QDirIterator and only appending the selected filename string to the statically defined Image folder path string when pasing the Image as a path)
+		+ this also fixes another cause of teh Above mentioned sorting bug where sorting was broken for a time which was atcually caused by the fileName vetcor not being synchronised to the main inotuImages Direcory List
+		
+		+ Added very basic Unit testing to allow for both certain checks to be evaluated at specific intervals and to prevent a series of crashes and fatal exceptions from terminating the Program/Application
+		
+		
+		The methods in the UnitTest header are used where the QVERIFY Macros are which are mostly in the QApp.cpp file if you need to look at it.
+			
+
+a0.14.2 (03.05.20)
+
+	+ Fixed a bug where the Imgs folder was treated as empty where 2 or less files were present.
+	
+	+ Changed CMake compilation flags to SSE3 and SSSE3 only from AVX2 to fix compatibility with older CPUs
+	
+	
+
+b1.0.0 (09.05.20
+		
+	+ Masive overhaul with the UI interation where much of the Qpainter logic is replaced witha  dedicated Event handler system Overrding the default/Inherited Event methods	
+	
+	+ Deicated Event handler system also allows for the abiilty to dynamically uopdate the Uio inreponce to certain polled or Queused events such as Mouse Button press or Mosue Movment, which also enbaled the ability to Aquire and Update teh Mouse Pos andspecbeust staus sjensi
+		this is used to allwo for teh Clip Draw rects to teh darwn Dierctly on teh Qpainter Vieport the pressing anY mouse Button and Moving the Mouse Cursor/Pos (To emulate teh General Functionality  of the OpenCV Bundled Annotaion tool)
+	
+	+ posible Speed/Performance Optimsation as a derivign Side-Effect of the Event habndker by reducing the number of polls for specific d soorder  ibokatiosn veficicenicninccincifircnirfn weh emnual invoked osad f auaaomted defualt hand;ingberrrrsnussuiaetc e.g.s.s.s.e.
+	
+	
+	
+	
+	
